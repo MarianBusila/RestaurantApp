@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RestaurantAPI.Models;
 
 namespace RestaurantAPI
 {
@@ -31,6 +33,7 @@ namespace RestaurantAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestaurantAPI", Version = "v1" });
             });
+            services.AddDbContext<RestaurantDbContext>(options => { options.UseSqlServer(Configuration.GetConnectionString("DevConnection")); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
