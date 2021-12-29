@@ -1,6 +1,15 @@
-import { Grid, InputAdornment, makeStyles } from "@material-ui/core";
+import {
+  ButtonGroup,
+  Grid,
+  InputAdornment,
+  Button as MuiButton,
+  makeStyles,
+} from "@material-ui/core";
 import React from "react";
 import { Input, Select, Button } from "../../controls";
+import ReplayIcon from "@material-ui/icons/Replay";
+import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
+import ReorderIcon from "@material-ui/icons/Reorder";
 import Form from "../../layouts/Form";
 
 const paymentMethods = [
@@ -9,15 +18,26 @@ const paymentMethods = [
   { id: "Card", title: "Card" },
 ];
 
-const useStyles = makeStyles(theme => ({
-    adornmentText: {
-        '& .MuiTypography-root': {
-            color: '#f3b33d',
-            fontWeight: 'bolder',
-            fontSize: '1.5em'
-        }
-    }
-}))
+const useStyles = makeStyles((theme) => ({
+  adornmentText: {
+    "& .MuiTypography-root": {
+      color: "#f3b33d",
+      fontWeight: "bolder",
+      fontSize: "1.5em",
+    },
+  },
+  submitButtonGroup: {
+    backgroundColor: "#f3b33d",
+    color: "#000",
+    margin: theme.spacing(1),
+    "& .MuiButton-label": {
+      textTransform: "none",
+    },
+    "&:hover": {
+      backgroundColor: "#f3b33d",
+    },
+  },
+}));
 
 export default function OrderForm(props) {
   const { values, errors, handleInputChange } = props;
@@ -34,7 +54,12 @@ export default function OrderForm(props) {
             value={values.orderNumber}
             InputProps={{
               startAdornment: (
-                <InputAdornment className={classes.adornmentText} position="start">#</InputAdornment>
+                <InputAdornment
+                  className={classes.adornmentText}
+                  position="start"
+                >
+                  #
+                </InputAdornment>
               ),
             }}
           />
@@ -65,10 +90,28 @@ export default function OrderForm(props) {
             value={values.total}
             InputProps={{
               startAdornment: (
-                <InputAdornment className={classes.adornmentText}  position="start">$</InputAdornment>
+                <InputAdornment
+                  className={classes.adornmentText}
+                  position="start"
+                >
+                  $
+                </InputAdornment>
               ),
             }}
           />
+          <ButtonGroup className={classes.submitButtonGroup}>
+            <MuiButton
+              size="large"
+              type="submit"
+              endIcon={<RestaurantMenuIcon />}
+            >
+              Submit
+            </MuiButton>
+            <MuiButton size="small" startIcon={<ReplayIcon />}></MuiButton>
+          </ButtonGroup>
+          <Button size="large" startIcon={<ReorderIcon />}>
+            Orders
+          </Button>
         </Grid>
       </Grid>
     </Form>
