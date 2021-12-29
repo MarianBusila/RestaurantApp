@@ -1,5 +1,5 @@
 import "./App.css";
-import { Container, Typography } from "@mui/material";
+import { Container, Typography } from "@material-ui/core";
 import Order from "./components/Order";
 
 function App() {
