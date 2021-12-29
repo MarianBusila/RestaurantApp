@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { Input, Select, Button } from "../../controls";
 import Form from "../../layouts/Form";
 
@@ -10,35 +10,8 @@ const paymentMethods = [
 
 ]
 
-const generateOrderNumber = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
-const getFreshModelObject = () => ({
-    orderMasterId: 0,
-    orderNumber: generateOrderNumber(),
-    customerId: 0,
-    paymentMethod: "None",
-    total: 0,
-    deletetdOrderItemsIds: [],
-    orderDetails: []
-})
-
-export default function OrderForm() {
-    const [values, setValues] = useState(getFreshModelObject());
-
-    const handleInputChange = e => {
-        const {name, value} = e.target;
-        setValues({
-            ...values,
-            [name]: value
-        });
-    }
-
-    const resetFormControls = () => {
-        setValues(getFreshModelObject());
-    }
-
+export default function OrderForm(props) {
+    const {values, errors, handleInputChange} = props;
   return (
     <Form>
       <Grid container>
