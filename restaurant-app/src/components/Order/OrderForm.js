@@ -5,12 +5,13 @@ import {
   Button as MuiButton,
   makeStyles,
 } from "@material-ui/core";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Input, Select, Button } from "../../controls";
 import ReplayIcon from "@material-ui/icons/Replay";
 import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import ReorderIcon from "@material-ui/icons/Reorder";
 import Form from "../../layouts/Form";
+import {createApiEndpoint, ENDPOINTS} from "../../api";
 
 const paymentMethods = [
   { id: "None", title: "None" },
@@ -43,6 +44,21 @@ export default function OrderForm(props) {
   const { values, errors, handleInputChange } = props;
   const classes = useStyles();
 
+  const [customerList, setCustomerList] = useState([]);
+
+  useEffect(() => {
+      createApiEndpoint(ENDPOINTS.CUSTOMER).fetchAll()
+      .then(response => {
+          let customerList = response.data.map(item => ({
+              id: item.customerId,
+              title: item.customerName
+          }));
+          customerList = [{ id: 0, title: "Select" }].concat(customerList);
+          setCustomerList(customerList);
+      })
+      .catch(err => console.log(err))
+  }, []) // since last array is empty this is equivalent of componentDidMount from react class components
+
   return (
     <Form>
       <Grid container>
@@ -68,11 +84,7 @@ export default function OrderForm(props) {
             name="customerId"
             value={values.customerId}
             onChange={handleInputChange}
-            options={[
-              { id: 0, title: "Select" },
-              { id: 1, title: "Customer 1" },
-              { id: 2, title: "Customer 2" },
-            ]}
+            options={customerList}
           />
         </Grid>
         <Grid item xs={6}>

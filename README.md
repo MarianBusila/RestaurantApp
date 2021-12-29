@@ -1,7 +1,9 @@
 # RestaurantApp
 
 ## Overview
-The application simulates a food ordering system. It is composed of a backend REST API (Asp.Net Core WebApi with EntityFramework) and a frontend app created with React and Material UI.
+The application simulates a food ordering system. It is composed of a backend REST API (Asp.Net Core WebApi with EntityFramework) and a frontend app created with *React* and *Material UI*. 
+The frontend app uses *axios* to call the backend api.
+
 The project is build based on these 2 tutorials:
 - [Complete React JS Master Detail CRUD with Asp.Net Core API](https://www.youtube.com/watch?v=i8LymADs_U4&t=248s)
 - [Perfect Master Detail CRUD in React JS with a Restaurant App](https://www.youtube.com/watch?v=z5NsNtrl4Og&t=10170s)
