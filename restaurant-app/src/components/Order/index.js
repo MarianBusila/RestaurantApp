@@ -61,7 +61,7 @@ export default function Order() {
         <SearchFoodItems {...{ orderedFoodItems: values.orderDetails, addFoodItem }}/>
       </Grid>
       <Grid item xs={6}>
-        <OrderedFoodItems {...{ orderedFoodItems: values.orderDetails, removeFoodItem }} />
+        <OrderedFoodItems {...{ removeFoodItem, values, setValues }} />
       </Grid>
     </Grid>
   );
