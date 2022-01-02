@@ -6,8 +6,9 @@ import {
   ListItemText,
   Paper,
   makeStyles,
+  ListItemSecondaryAction,
 } from "@material-ui/core";
-import { SearchTwoTone } from "@material-ui/icons";
+import { ArrowForwardIos, PlusOne, SearchTwoTone } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
 import { createApiEndpoint, ENDPOINTS } from "../../api";
 
@@ -21,9 +22,31 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1.5),
     flex: 1,
   },
+  listRoot: {
+      marginTop: theme.spacing(1),
+      maxHeight: 450,
+      overflow: 'auto',
+      '& li:hover': {
+          cursor: 'pointer',
+          backgroundColor: '#E3E3E3'
+      },
+      '& li:hover .MuiButtonBase-root': {
+          display: 'block',
+          color: '#000',
+      },
+      '& .MuiButtonBase-root': {
+          display: 'none'
+      },
+      '& .MuiButtonBase-root:hover': {
+          backgroundColor: 'transparent'
+      }
+  }
 }));
 
-export default function SearchFoodItems() {
+export default function SearchFoodItems(props) {
+
+  const {addFoodItem} = props;
+
   const [foodItemList, setFoodItemList] = useState([]);
   const [searchKey, setSearchKey] = useState();
   const [searchList, setSearchList] = useState([]);
@@ -60,10 +83,16 @@ export default function SearchFoodItems() {
           <SearchTwoTone />
         </IconButton>
       </Paper>
-      <List>
+      <List className={classes.listRoot}>
         {searchList.map((item, index) => (
           <ListItem key={index}>
             <ListItemText primary={item.foodItemName} secondary={item.price} />
+            <ListItemSecondaryAction > 
+                <IconButton onClick={e => addFoodItem(item)}>
+                    <PlusOne />
+                    <ArrowForwardIos />
+                </IconButton>
+            </ListItemSecondaryAction>
           </ListItem>
         ))}
       </List>
