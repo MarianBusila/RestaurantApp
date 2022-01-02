@@ -45,10 +45,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchFoodItems(props) {
 
-  const {addFoodItem} = props;
+  const {orderedFoodItems, addFoodItem} = props;
 
   const [foodItemList, setFoodItemList] = useState([]);
-  const [searchKey, setSearchKey] = useState();
+  const [searchKey, setSearchKey] = useState("");
   const [searchList, setSearchList] = useState([]);
   const classes = useStyles();
 
@@ -65,10 +65,10 @@ export default function SearchFoodItems(props) {
   useEffect(() => {
       let x = [...foodItemList];
       x = x.filter((y) => {
-        return y.foodItemName.toLowerCase().includes(searchKey.toLowerCase())
+        return y.foodItemName.toLowerCase().includes(searchKey.toLowerCase()) && orderedFoodItems.every( item => item.foodItemId !== y.foodItemId)
       });
       setSearchList(x);
-  }, [searchKey]);
+  }, [searchKey, orderedFoodItems]);
 
   return (
     <>
