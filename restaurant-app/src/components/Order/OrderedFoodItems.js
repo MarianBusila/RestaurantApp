@@ -1,8 +1,9 @@
-import { List, ListItem, ListItemText, Paper } from '@material-ui/core';
+import { IconButton, List, ListItem, ListItemText, ListItemSecondaryAction, Paper } from '@material-ui/core';
+import { DeleteTwoTone } from '@material-ui/icons';
 import React from 'react'
 
 export default function OrderedFoodItems(props) {
-    const {orderedFoodItems} = props;
+    const {orderedFoodItems, removeFoodItem} = props;
 
     return (
         <List>
@@ -18,6 +19,11 @@ export default function OrderedFoodItems(props) {
                                     fontSize: '1.2em'
                                 }
                             }} />
+                            <ListItemSecondaryAction>
+                                <IconButton disableRipple onClick={e => removeFoodItem(index, item.orderDetailsId)}>
+                                    <DeleteTwoTone />
+                                </IconButton>
+                            </ListItemSecondaryAction>
                         </ListItem>
                     </Paper>
                 ))

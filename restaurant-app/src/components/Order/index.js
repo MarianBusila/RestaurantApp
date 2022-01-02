@@ -45,6 +45,13 @@ export default function Order() {
       })
   }
 
+  const removeFoodItem = (index, id) => {
+      let x = {...values};
+      x.orderDetails = x.orderDetails.filter( (_, i) => i !== index );
+      setValues({...x});
+
+  }
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -54,7 +61,7 @@ export default function Order() {
         <SearchFoodItems {...{ addFoodItem }}/>
       </Grid>
       <Grid item xs={6}>
-        <OrderedFoodItems {...{ orderedFoodItems: values.orderDetails }} />
+        <OrderedFoodItems {...{ orderedFoodItems: values.orderDetails, removeFoodItem }} />
       </Grid>
     </Grid>
   );
