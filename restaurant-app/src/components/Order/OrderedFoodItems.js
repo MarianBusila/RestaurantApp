@@ -12,14 +12,19 @@ import { DeleteTwoTone } from "@material-ui/icons";
 import React from "react";
 
 export default function OrderedFoodItems(props) {
-  const { removeFoodItem, values, setValues } = props;
+  const { values, setValues } = props;
   let orderedFoodItems = values.orderDetails;
 
+  const removeFoodItem = (index, id) => {
+    let x = { ...values };
+    x.orderDetails = x.orderDetails.filter((_, i) => i !== index);
+    setValues({ ...x });
+  };
   const updateQuantity = (index, value) => {
     let x = { ...values };
     let foodItem = x.orderDetails[index];
     if (foodItem.quantity + value > 0) {
-        foodItem.quantity += value;
+      foodItem.quantity += value;
       setValues({ ...x });
     }
   };

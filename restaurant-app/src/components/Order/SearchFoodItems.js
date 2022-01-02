@@ -23,51 +23,70 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
   },
   listRoot: {
-      marginTop: theme.spacing(1),
-      maxHeight: 450,
-      overflow: 'auto',
-      '& li:hover': {
-          cursor: 'pointer',
-          backgroundColor: '#E3E3E3'
-      },
-      '& li:hover .MuiButtonBase-root': {
-          display: 'block',
-          color: '#000',
-      },
-      '& .MuiButtonBase-root': {
-          display: 'none'
-      },
-      '& .MuiButtonBase-root:hover': {
-          backgroundColor: 'transparent'
-      }
-  }
+    marginTop: theme.spacing(1),
+    maxHeight: 450,
+    overflow: "auto",
+    "& li:hover": {
+      cursor: "pointer",
+      backgroundColor: "#E3E3E3",
+    },
+    "& li:hover .MuiButtonBase-root": {
+      display: "block",
+      color: "#000",
+    },
+    "& .MuiButtonBase-root": {
+      display: "none",
+    },
+    "& .MuiButtonBase-root:hover": {
+      backgroundColor: "transparent",
+    },
+  },
 }));
 
 export default function SearchFoodItems(props) {
-
-  const {orderedFoodItems, addFoodItem} = props;
+  const { values, setValues } = props;
+  let orderedFoodItems = values.orderDetails;
 
   const [foodItemList, setFoodItemList] = useState([]);
   const [searchKey, setSearchKey] = useState("");
   const [searchList, setSearchList] = useState([]);
   const classes = useStyles();
 
+  const addFoodItem = (foodItem) => {
+    let x = {
+      orderDetailId: 0,
+      orderMasterId: values.orderMasterId,
+      foodItemId: foodItem.foodItemId,
+      foodItemPrice: foodItem.price,
+      quantity: 1,
+      foodItemName: foodItem.foodItemName,
+    };
+
+    setValues({
+      ...values,
+      orderDetails: [...values.orderDetails, x],
+    });
+  };
+
   useEffect(() => {
     createApiEndpoint(ENDPOINTS.FOODITEM)
       .fetchAll()
       .then((response) => {
         setFoodItemList(response.data);
-        setSearchList(response.data)
+        setSearchList(response.data);
       })
       .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-      let x = [...foodItemList];
-      x = x.filter((y) => {
-        return y.foodItemName.toLowerCase().includes(searchKey.toLowerCase()) && orderedFoodItems.every( item => item.foodItemId !== y.foodItemId)
-      });
-      setSearchList(x);
+    let x = [...foodItemList];
+    x = x.filter((y) => {
+      return (
+        y.foodItemName.toLowerCase().includes(searchKey.toLowerCase()) &&
+        orderedFoodItems.every((item) => item.foodItemId !== y.foodItemId)
+      );
+    });
+    setSearchList(x);
   }, [searchKey, orderedFoodItems]);
 
   return (
@@ -87,11 +106,11 @@ export default function SearchFoodItems(props) {
         {searchList.map((item, index) => (
           <ListItem key={index}>
             <ListItemText primary={item.foodItemName} secondary={item.price} />
-            <ListItemSecondaryAction > 
-                <IconButton onClick={e => addFoodItem(item)}>
-                    <PlusOne />
-                    <ArrowForwardIos />
-                </IconButton>
+            <ListItemSecondaryAction>
+              <IconButton onClick={(e) => addFoodItem(item)}>
+                <PlusOne />
+                <ArrowForwardIos />
+              </IconButton>
             </ListItemSecondaryAction>
           </ListItem>
         ))}
