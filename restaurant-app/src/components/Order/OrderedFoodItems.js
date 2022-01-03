@@ -59,6 +59,7 @@ export default function OrderedFoodItems(props) {
     x.orderDetails = x.orderDetails.filter((_, i) => i !== index);
     setValues({ ...x });
   };
+
   const updateQuantity = (index, value) => {
     let x = { ...values };
     let foodItem = x.orderDetails[index];
@@ -70,60 +71,66 @@ export default function OrderedFoodItems(props) {
 
   return (
     <List>
-      { orderedFoodItems.length === 0 ?
-      <ListItem>
+      {orderedFoodItems.length === 0 ? (
+        <ListItem>
           <ListItemText
             primary="Please select food items"
-            primaryTypographyProps = {{
-                style: {
-                    textAlign: 'center',
-                    fontStyle: 'italic'
-                }
+            primaryTypographyProps={{
+              style: {
+                textAlign: "center",
+                fontStyle: "italic",
+              },
             }}
           />
-      </ListItem>
-      : orderedFoodItems.map((item, index) => (
-        <Paper className={classes.paperRoot} key={index}>
-          <ListItem>
-            <ListItemText
-              primary={item.foodItemName}
-              primaryTypographyProps={{
-                component: "h1",
-                style: {
-                  fontWeight: "500",
-                  fontSize: "1.2em",
-                },
-              }}
-              secondary={
-                <>
-                  <ButtonGroup className={classes.buttonGroup} size="small">
-                    <Button onClick={(e) => updateQuantity(index, -1)}>
-                      -
-                    </Button>
-                    <Button disabled>{item.quantity}</Button>
-                    <Button onClick={(e) => updateQuantity(index, 1)}>+</Button>
-                  </ButtonGroup>
-                  <span className={classes.totalPerItem}>
-                    {"$" +
-                      roundTo2DecimalPoints(item.quantity * item.foodItemPrice)}
-                  </span>
-                </>
-              }
-              secondaryTypographyProps={{
-                component: "div",
-              }}
-            />
-            <ListItemSecondaryAction className={classes.deleteButton}>
-              <IconButton
-                disableRipple
-                onClick={(e) => removeFoodItem(index, item.orderDetailsId)}
-              >
-                <DeleteTwoTone />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        </Paper>
-      ))}
+        </ListItem>
+      ) : (
+        orderedFoodItems.map((item, index) => (
+          <Paper className={classes.paperRoot} key={index}>
+            <ListItem>
+              <ListItemText
+                primary={item.foodItemName}
+                primaryTypographyProps={{
+                  component: "h1",
+                  style: {
+                    fontWeight: "500",
+                    fontSize: "1.2em",
+                  },
+                }}
+                secondary={
+                  <>
+                    <ButtonGroup className={classes.buttonGroup} size="small">
+                      <Button onClick={(e) => updateQuantity(index, -1)}>
+                        -
+                      </Button>
+                      <Button disabled>{item.quantity}</Button>
+                      <Button onClick={(e) => updateQuantity(index, 1)}>
+                        +
+                      </Button>
+                    </ButtonGroup>
+                    <span className={classes.totalPerItem}>
+                      {"$" +
+                        roundTo2DecimalPoints(
+                          item.quantity * item.foodItemPrice
+                        )}
+                    </span>
+                  </>
+                }
+                secondaryTypographyProps={{
+                  component: "div",
+                }}
+              />
+              <ListItemSecondaryAction className={classes.deleteButton}>
+                <IconButton
+                  disableRipple
+                  onClick={(e) => removeFoodItem(index, item.orderDetailsId)}
+                >
+                  <DeleteTwoTone />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          </Paper>
+        ))
+      )}
     </List>
   );
 }
