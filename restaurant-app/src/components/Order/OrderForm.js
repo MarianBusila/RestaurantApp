@@ -16,6 +16,7 @@ import { AirlineSeatIndividualSuiteSharp } from "@material-ui/icons";
 import { roundTo2DecimalPoints } from "../../utils";
 import Popup from "../../layouts/Popup";
 import OrderList from "./OrderList";
+import Notification from "../../layouts/Notification";
 
 const paymentMethods = [
   { id: "None", title: "None" },
@@ -58,6 +59,7 @@ export default function OrderForm(props) {
   const [customerList, setCustomerList] = useState([]);
   const [orderListVisibility, setOrderListVisibility] = useState(false);
   const [orderId, setOrderId] = useState(0);
+  const [notify, setNotify] = useState({ isOpen: false });
 
   useEffect(() => {
     createApiEndpoint(ENDPOINTS.CUSTOMER)
@@ -117,6 +119,7 @@ export default function OrderForm(props) {
           .create(values)
           .then((res) => {
             resetFormControls();
+            setNotify({ isOpen: true, message: "New order is created" });
           })
           .catch((err) => console.log(err));
       } else {
@@ -125,10 +128,16 @@ export default function OrderForm(props) {
           .update(values.orderMasterId, values)
           .then((res) => {
             setOrderId(0);
+            setNotify({ isOpen: true, message: "Order is updated" });
           })
           .catch((err) => console.log(err));
       }
     }
+  };
+
+  const resetForm = () => {
+    resetFormControls();
+    setOrderId(0);
   };
 
   const openListOfOrders = () => {
@@ -197,7 +206,11 @@ export default function OrderForm(props) {
               >
                 Submit
               </MuiButton>
-              <MuiButton size="small" startIcon={<ReplayIcon />}></MuiButton>
+              <MuiButton
+                size="small"
+                onClick={resetForm}
+                startIcon={<ReplayIcon />}
+              ></MuiButton>
             </ButtonGroup>
             <Button
               size="large"
@@ -216,6 +229,7 @@ export default function OrderForm(props) {
       >
         <OrderList {...{ setOrderId, setOrderListVisibility }} />
       </Popup>
+      <Notification {...{ notify, setNotify }} />
     </>
   );
 }
