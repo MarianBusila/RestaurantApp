@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OrderForm(props) {
-  const { values, setValues, errors, handleInputChange } = props;
+  const { values, setValues, errors, setErrors, handleInputChange } = props;
   const classes = useStyles();
 
   const [customerList, setCustomerList] = useState([]);
@@ -72,8 +72,23 @@ export default function OrderForm(props) {
 
   }, [JSON.stringify(values.orderDetails)]);
 
+  const validateForm = () => {
+    let temp = {};
+    temp.customerId = values.customerId !== 0 ? "": "This field is required.";
+    temp.paymentMethod = values.paymentMethod !== "None" ? "": "This field is required.";
+    temp.orderDetails = values.orderDetails.length !== 0 ? "": "This field is required.";
+    setErrors({...temp});
+    return Object.values(temp).every(x => x==="")
+  }
+
+  const submitOrder = e => {
+    e.preventDefault();
+    if(validateForm()) {
+
+    }
+  }
   return (
-    <Form>
+    <Form onSubmit={submitOrder}>
       <Grid container>
         <Grid item xs={6}>
           <Input
@@ -98,6 +113,7 @@ export default function OrderForm(props) {
             value={values.customerId}
             onChange={handleInputChange}
             options={customerList}
+            error={errors.customerId}
           />
         </Grid>
         <Grid item xs={6}>
@@ -107,6 +123,7 @@ export default function OrderForm(props) {
             value={values.paymentMethod}
             onChange={handleInputChange}
             options={paymentMethods}
+            error={errors.paymentMethod}
           />
           <Input
             disabled
