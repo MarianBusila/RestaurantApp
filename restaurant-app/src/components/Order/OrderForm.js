@@ -111,12 +111,23 @@ export default function OrderForm(props) {
   const submitOrder = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      createApiEndpoint(ENDPOINTS.ORDER)
-        .create(values)
-        .then((res) => {
-          resetFormControls();
-        })
-        .catch((err) => console.log(err));
+      if (values.orderMasterId === 0) {
+        // new order
+        createApiEndpoint(ENDPOINTS.ORDER)
+          .create(values)
+          .then((res) => {
+            resetFormControls();
+          })
+          .catch((err) => console.log(err));
+      } else {
+        // existing order
+        createApiEndpoint(ENDPOINTS.ORDER)
+          .update(values.orderMasterId, values)
+          .then((res) => {
+            setOrderId(0);
+          })
+          .catch((err) => console.log(err));
+      }
     }
   };
 

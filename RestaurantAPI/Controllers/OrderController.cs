@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -79,6 +80,24 @@ namespace RestaurantAPI.Controllers
             }
 
             _context.Entry(orderMaster).State = EntityState.Modified;
+
+            // existing food items & newly added food items
+            foreach (OrderDetail item in orderMaster.OrderDetails)
+            {
+                if (item.OrderDetailId == 0) 
+                    _context.OrderDetails.Add(item); // new
+                else
+                {
+                    _context.Entry(item).State = EntityState.Modified; // existing
+                }
+            }
+
+            // deleted food items
+            foreach (string deletedItemId in orderMaster.DeletedOrderItemIds.Split(',').Where(x => x!= ""))
+            {
+                OrderDetail orderDetail = _context.OrderDetails.Find(Convert.ToInt64(deletedItemId));
+                _context.OrderDetails.Remove(orderDetail);
+            }
 
             try
             {
