@@ -12,6 +12,8 @@ import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import ReorderIcon from "@material-ui/icons/Reorder";
 import Form from "../../layouts/Form";
 import {createApiEndpoint, ENDPOINTS} from "../../api";
+import { AirlineSeatIndividualSuiteSharp } from "@material-ui/icons";
+import { roundTo2DecimalPoints } from "../../utils";
 
 const paymentMethods = [
   { id: "None", title: "None" },
@@ -41,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OrderForm(props) {
-  const { values, errors, handleInputChange } = props;
+  const { values, setValues, errors, handleInputChange } = props;
   const classes = useStyles();
 
   const [customerList, setCustomerList] = useState([]);
@@ -58,6 +60,17 @@ export default function OrderForm(props) {
       })
       .catch(err => console.log(err))
   }, []) // since last array is empty this is equivalent of componentDidMount from react class components
+
+  useEffect(() => {
+    let gTotal = values.orderDetails.reduce((tempTotal, item) => {
+      return tempTotal + (item.quantity * item.foodItemPrice);
+    }, 0);
+    setValues({
+      ...values,
+      total: roundTo2DecimalPoints(gTotal)
+    });
+
+  }, [JSON.stringify(values.orderDetails)]);
 
   return (
     <Form>

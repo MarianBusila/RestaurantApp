@@ -32,7 +32,7 @@ export default function Order() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <OrderForm {...{ values, errors, handleInputChange }} />
+        <OrderForm {...{ values, setValues, errors, handleInputChange }} />
       </Grid>
       <Grid item xs={6}>
         <SearchFoodItems {...{ values, setValues }} />
