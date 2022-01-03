@@ -104,7 +104,7 @@ export default function SearchFoodItems(props) {
       </Paper>
       <List className={classes.listRoot}>
         {searchList.map((item, index) => (
-          <ListItem key={index}>
+          <ListItem key={index} onClick={(e) => addFoodItem(item)}>
             <ListItemText primary={item.foodItemName} secondary={item.price} />
             <ListItemSecondaryAction>
               <IconButton onClick={(e) => addFoodItem(item)}>
