@@ -14,6 +14,8 @@ import Form from "../../layouts/Form";
 import { createApiEndpoint, ENDPOINTS } from "../../api";
 import { AirlineSeatIndividualSuiteSharp } from "@material-ui/icons";
 import { roundTo2DecimalPoints } from "../../utils";
+import Popup from "../../layouts/Popup";
+import OrderList from "./OrderList";
 
 const paymentMethods = [
   { id: "None", title: "None" },
@@ -43,10 +45,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OrderForm(props) {
-  const { values, setValues, errors, setErrors, handleInputChange, resetFormControls } = props;
+  const {
+    values,
+    setValues,
+    errors,
+    setErrors,
+    handleInputChange,
+    resetFormControls,
+  } = props;
   const classes = useStyles();
 
   const [customerList, setCustomerList] = useState([]);
+  const [orderListVisibility, setOrderListVisibility] = useState(false);
 
   useEffect(() => {
     createApiEndpoint(ENDPOINTS.CUSTOMER)
@@ -91,78 +101,95 @@ export default function OrderForm(props) {
         .then((res) => {
           resetFormControls();
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
   };
+
+  const openListOfOrders = () => {
+    setOrderListVisibility(true);
+  };
   return (
-    <Form onSubmit={submitOrder}>
-      <Grid container>
-        <Grid item xs={6}>
-          <Input
-            disabled
-            label="Order Number"
-            name="orderNumber"
-            value={values.orderNumber}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment
-                  className={classes.adornmentText}
-                  position="start"
-                >
-                  #
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Select
-            label="Customer"
-            name="customerId"
-            value={values.customerId}
-            onChange={handleInputChange}
-            options={customerList}
-            error={errors.customerId}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Select
-            label="Payment Method"
-            name="paymentMethod"
-            value={values.paymentMethod}
-            onChange={handleInputChange}
-            options={paymentMethods}
-            error={errors.paymentMethod}
-          />
-          <Input
-            disabled
-            label="Total"
-            name="total"
-            value={values.total}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment
-                  className={classes.adornmentText}
-                  position="start"
-                >
-                  $
-                </InputAdornment>
-              ),
-            }}
-          />
-          <ButtonGroup className={classes.submitButtonGroup}>
-            <MuiButton
+    <>
+      <Form onSubmit={submitOrder}>
+        <Grid container>
+          <Grid item xs={6}>
+            <Input
+              disabled
+              label="Order Number"
+              name="orderNumber"
+              value={values.orderNumber}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment
+                    className={classes.adornmentText}
+                    position="start"
+                  >
+                    #
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Select
+              label="Customer"
+              name="customerId"
+              value={values.customerId}
+              onChange={handleInputChange}
+              options={customerList}
+              error={errors.customerId}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Select
+              label="Payment Method"
+              name="paymentMethod"
+              value={values.paymentMethod}
+              onChange={handleInputChange}
+              options={paymentMethods}
+              error={errors.paymentMethod}
+            />
+            <Input
+              disabled
+              label="Total"
+              name="total"
+              value={values.total}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment
+                    className={classes.adornmentText}
+                    position="start"
+                  >
+                    $
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <ButtonGroup className={classes.submitButtonGroup}>
+              <MuiButton
+                size="large"
+                type="submit"
+                endIcon={<RestaurantMenuIcon />}
+              >
+                Submit
+              </MuiButton>
+              <MuiButton size="small" startIcon={<ReplayIcon />}></MuiButton>
+            </ButtonGroup>
+            <Button
               size="large"
-              type="submit"
-              endIcon={<RestaurantMenuIcon />}
+              startIcon={<ReorderIcon />}
+              onClick={openListOfOrders}
             >
-              Submit
-            </MuiButton>
-            <MuiButton size="small" startIcon={<ReplayIcon />}></MuiButton>
-          </ButtonGroup>
-          <Button size="large" startIcon={<ReorderIcon />}>
-            Orders
-          </Button>
+              Orders
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </Form>
+      </Form>
+      <Popup
+        title="List of Orders"
+        openPopup={orderListVisibility}
+        setOpenPopup={setOrderListVisibility}
+      >
+        <OrderList />
+      </Popup>
+    </>
   );
 }
