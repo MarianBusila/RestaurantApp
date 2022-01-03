@@ -5,8 +5,10 @@ import { createApiEndpoint, ENDPOINTS } from "../../api";
 import Table from "../../layouts/Table";
 
 export default function OrderList(props) {
-  const { setOrderId, setOrderListVisibility } = props;
+  const { setOrderId, setOrderListVisibility, resetFormControls, setNotify } =
+    props;
   const [orderList, setOrderList] = useState([]);
+
   useEffect(() => {
     createApiEndpoint(ENDPOINTS.ORDER)
       .fetchAll()
@@ -15,10 +17,26 @@ export default function OrderList(props) {
       })
       .catch((err) => console.log(err));
   }, []);
+
   const showForUpdate = (id) => {
     setOrderId(id);
     setOrderListVisibility(false);
   };
+
+  const deleteOrder = (id) => {
+    if (window.confirm("Delete the selected order?")) {
+      createApiEndpoint(ENDPOINTS.ORDER)
+        .delete(id)
+        .then((res) => {
+          setOrderListVisibility(false);
+          setOrderId(0);
+          resetFormControls();
+          setNotify({ isOpen: true, message: "Order is deleted." });
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
   return (
     <Table>
       <TableHead>
@@ -46,7 +64,10 @@ export default function OrderList(props) {
               {item.total}
             </TableCell>
             <TableCell>
-              <DeleteOutlineTwoTone color="secondary" />
+              <DeleteOutlineTwoTone
+                color="secondary"
+                onClick={(e) => deleteOrder(item.orderMasterId)}
+              />
             </TableCell>
           </TableRow>
         ))}

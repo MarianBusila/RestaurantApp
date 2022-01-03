@@ -119,7 +119,7 @@ export default function OrderForm(props) {
           .create(values)
           .then((res) => {
             resetFormControls();
-            setNotify({ isOpen: true, message: "New order is created" });
+            setNotify({ isOpen: true, message: "New order is created." });
           })
           .catch((err) => console.log(err));
       } else {
@@ -128,7 +128,7 @@ export default function OrderForm(props) {
           .update(values.orderMasterId, values)
           .then((res) => {
             setOrderId(0);
-            setNotify({ isOpen: true, message: "Order is updated" });
+            setNotify({ isOpen: true, message: "Order is updated." });
           })
           .catch((err) => console.log(err));
       }
@@ -227,7 +227,14 @@ export default function OrderForm(props) {
         openPopup={orderListVisibility}
         setOpenPopup={setOrderListVisibility}
       >
-        <OrderList {...{ setOrderId, setOrderListVisibility }} />
+        <OrderList
+          {...{
+            setOrderId,
+            setOrderListVisibility,
+            resetFormControls,
+            setNotify,
+          }}
+        />
       </Popup>
       <Notification {...{ notify, setNotify }} />
     </>
