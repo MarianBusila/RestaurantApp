@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { createApiEndpoint, ENDPOINTS } from "../../api";
 import Table from "../../layouts/Table";
 
-export default function OrderList() {
+export default function OrderList(props) {
+  const { setOrderId, setOrderListVisibility } = props;
   const [orderList, setOrderList] = useState([]);
   useEffect(() => {
     createApiEndpoint(ENDPOINTS.ORDER)
@@ -14,6 +15,10 @@ export default function OrderList() {
       })
       .catch((err) => console.log(err));
   }, []);
+  const showForUpdate = (id) => {
+    setOrderId(id);
+    setOrderListVisibility(false);
+  };
   return (
     <Table>
       <TableHead>
@@ -28,10 +33,18 @@ export default function OrderList() {
       <TableBody>
         {orderList.map((item) => (
           <TableRow key={item.orderMasterId}>
-            <TableCell>{item.orderNumber}</TableCell>
-            <TableCell>{item.customer.customerName}</TableCell>
-            <TableCell>{item.paymentMethod}</TableCell>
-            <TableCell>{item.total}</TableCell>
+            <TableCell onClick={(e) => showForUpdate(item.orderMasterId)}>
+              {item.orderNumber}
+            </TableCell>
+            <TableCell onClick={(e) => showForUpdate(item.orderMasterId)}>
+              {item.customer.customerName}
+            </TableCell>
+            <TableCell onClick={(e) => showForUpdate(item.orderMasterId)}>
+              {item.paymentMethod}
+            </TableCell>
+            <TableCell onClick={(e) => showForUpdate(item.orderMasterId)}>
+              {item.total}
+            </TableCell>
             <TableCell>
               <DeleteOutlineTwoTone color="secondary" />
             </TableCell>

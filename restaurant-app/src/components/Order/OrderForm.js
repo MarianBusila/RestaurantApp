@@ -57,6 +57,7 @@ export default function OrderForm(props) {
 
   const [customerList, setCustomerList] = useState([]);
   const [orderListVisibility, setOrderListVisibility] = useState(false);
+  const [orderId, setOrderId] = useState(0);
 
   useEffect(() => {
     createApiEndpoint(ENDPOINTS.CUSTOMER)
@@ -81,6 +82,20 @@ export default function OrderForm(props) {
       total: roundTo2DecimalPoints(gTotal),
     });
   }, [JSON.stringify(values.orderDetails)]);
+
+  useEffect(() => {
+    if (orderId === 0) resetFormControls();
+    else {
+      // fetch corresponding order
+      createApiEndpoint(ENDPOINTS.ORDER)
+        .fetchById(orderId)
+        .then((res) => {
+          setValues(res.data);
+          setErrors({});
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [orderId]);
 
   const validateForm = () => {
     let temp = {};
@@ -188,7 +203,7 @@ export default function OrderForm(props) {
         openPopup={orderListVisibility}
         setOpenPopup={setOrderListVisibility}
       >
-        <OrderList />
+        <OrderList {...{ setOrderId, setOrderListVisibility }} />
       </Popup>
     </>
   );
